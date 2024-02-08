@@ -1,0 +1,136 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>ArcGIS Maps SDK for JavaScript Tutorials: Add a point, line, and polygon</title>
+  <style>
+    html, body, #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.28/"></script>
+  <script>
+
+  require([
+    "esri/config",
+    "esri/Map",
+    "esri/views/MapView",
+    "esri/Graphic",
+    "esri/layers/GraphicsLayer"
+
+    ], function(esriConfig,Map, MapView, Graphic, GraphicsLayer) {
+
+  esriConfig.apiKey = "AAPKfc6c0d4986dd4372b916d872b516c5adV8n6utWqmeoFQ1JY6_Bnnbrrlrfn6gyHiL4-6aZiDW8l2QhJCh5X2NNN9znql2Qz";
+
+  const map = new Map({
+    basemap: "arcgis-streets-night" // basemap styles service
+  });
+
+  const view = new MapView({
+    map: map,
+    center: [-94.520071, 49.610242], //Longitude, latitude
+    zoom: 4,
+    container: "viewDiv"
+ });
+
+ const graphicsLayer = new GraphicsLayer();
+ map.add(graphicsLayer);
+
+  const multipoint = {
+        type: "multipoint", //modified from default
+        points: [
+         [-79.611753, 43.680559], 
+         [-114.009932, 51.130706],
+         [-104.655972, 50.433416]
+  ]
+ };
+
+ const simpleMarkerSymbol = {
+    type: "simple-marker",
+    color: [255,0,0],  // Red
+    outline: {
+        color: [255, 204, 229], // Pink
+        width: 0.5
+    },
+    size: "12px"
+ };
+
+  const multipointGraphic = new Graphic({
+      geometry: multipoint,
+      symbol: simpleMarkerSymbol,
+ });
+ 
+ graphicsLayer.add(multipointGraphic);
+
+ // Create a line geometry
+ const polyline = {
+    type: "polyline",
+    paths: [
+        [-79.611753, 43.680559], //Longitude, latitude
+        [-114.009932, 51.130706], //Longitude, latitude
+        [-104.655972, 50.433416]  //Longitude, latitude
+    ]
+ };
+ const simpleLineSymbol = {
+    type: "simple-line",
+    color: [255, 255, 102], // Yellow
+    width: 2
+ };
+
+ const polylineGraphic = new Graphic({
+    geometry: polyline,
+    symbol: simpleLineSymbol
+ });
+ graphicsLayer.add(polylineGraphic);
+
+ // Create a polygon geometry
+ const polygon = {
+    type: "polygon",
+    rings: [
+        [-110.005128, 48.999681], //Longitude, latitude
+        [-109.99901545811375, 60.003212522330344], //Longitude, latitude
+        [-101.9999930179315,  60.000036942900856], //Longitude, latitude
+        [-102.010512,  55.820138], //Longitude, latitude
+        [-101.361847, 48.999541],   //Longitude, latitude
+    ]
+ };
+ 
+ const simpleFillSymbol = {
+    type: "simple-fill",
+    color: [229, 255, 204, 0.2],  // Green, opacity 20%
+    outline: {
+        color: [255, 255, 255],
+        width: 1
+    }
+ };
+
+ const popupTemplate = {
+    title: "My visit to Regina,Saskatchewan",
+    content: "I visited Regina during the winter break to meet my girlfriend. It is a beautiful city."
+ }
+ const attributes = {
+    Name: "Graphic",
+    Description: "I am a polygon"
+ }
+
+ const polygonGraphic = new Graphic({
+    geometry: polygon,
+    symbol: simpleFillSymbol,
+
+    attributes: attributes,
+    popupTemplate: popupTemplate
+
+ });
+ graphicsLayer.add(polygonGraphic);
+
+ });
+</script>
+</head>
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>
